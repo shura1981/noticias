@@ -24,7 +24,7 @@ class _Navegacion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navigationProvider =
-        Provider.of<_NavigationProvider>(context, listen: false);
+        Provider.of<_NavigationProvider>(context);
 
     return BottomNavigationBar(
       currentIndex: navigationProvider.paginaActual,
@@ -33,8 +33,8 @@ class _Navegacion extends StatelessWidget {
       },
       items: const [
         BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline), label: 'Para ti'),
-        BottomNavigationBarItem(icon: Icon(Icons.public), label: 'Encabezados'),
+            icon: Icon(Icons.person_outline), label: 'Noticias'),
+        BottomNavigationBarItem(icon: Icon(Icons.public), label: 'Categorías'),
       ],
     );
   }

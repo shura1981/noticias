@@ -9,6 +9,30 @@ const _apiKey = '4ab7e01d41c54bdb9ba30bafbf2ac919';
 
 class NewsService with ChangeNotifier {
   List<Article> headlines = [];
+  String _selectedCategory = 'business';
+  bool isLoad = false;
+
+  String get selectedCategory => _selectedCategory;
+
+  set selectedCategory(String value) {
+    _selectedCategory = value;
+    getArticlesByCategory(value);
+  }
+
+  Map<String, List<Article>> categoryArticles = {};
+  assignCategoryArticles(String category, List<Article> articles) {
+    categoryArticles[category] = articles;
+  }
+
+  List<Article> get selectedCategoryArticles {
+    return categoryArticles[_selectedCategory]!;
+  }
+
+  clearKeyCategory() {
+    for (var category in categories) {
+      categoryArticles[category.name] = [];
+    }
+  }
 
   List<Categories> categories = [
     Categories(icon: FontAwesomeIcons.building, name: 'business'),
@@ -21,14 +45,34 @@ class NewsService with ChangeNotifier {
 
   NewsService() {
     getTopHeadlines();
+    clearKeyCategory();
+    getArticlesByCategory(selectedCategory);
   }
 
   getTopHeadlines() async {
-    const url = '$_urlNews/top-headlines?country=co&apiKey=$_apiKey';
+    const url = '$_urlNews/top-headlines?country=ca&apiKey=$_apiKey';
     final resp = await http.get(Uri.parse(url));
     final newsResponse = newsModelFromJson(resp.body);
 
     headlines.addAll(newsResponse.articles);
+    notifyListeners();
+  }
+
+  getArticlesByCategory([String category = 'business']) async {
+    if (categoryArticles[category]!.isNotEmpty) {
+      categoryArticles[category];
+      notifyListeners();
+      return;
+    }
+
+    isLoad = true;
+    notifyListeners();
+    final url =
+        '$_urlNews/top-headlines?country=ca&apiKey=$_apiKey&category=$category';
+    final resp = await http.get(Uri.parse(url));
+    final newsResponse = newsModelFromJson(resp.body);
+    assignCategoryArticles(category, newsResponse.articles);
+    isLoad = false;
     notifyListeners();
   }
 }
