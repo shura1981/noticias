@@ -11,6 +11,7 @@ class NewsService with ChangeNotifier {
   List<Article> headlines = [];
   String _selectedCategory = 'business';
   bool isLoad = false;
+  String _country= 'us';
 
   String get selectedCategory => _selectedCategory;
 
@@ -50,7 +51,7 @@ class NewsService with ChangeNotifier {
   }
 
   getTopHeadlines() async {
-    const url = '$_urlNews/top-headlines?country=ca&apiKey=$_apiKey';
+  var url = '$_urlNews/top-headlines?country=$_country&apiKey=$_apiKey';
     final resp = await http.get(Uri.parse(url));
     final newsResponse = newsModelFromJson(resp.body);
 
@@ -68,7 +69,7 @@ class NewsService with ChangeNotifier {
     isLoad = true;
     notifyListeners();
     final url =
-        '$_urlNews/top-headlines?country=ca&apiKey=$_apiKey&category=$category';
+        '$_urlNews/top-headlines?country=$_country&apiKey=$_apiKey&category=$category';
     final resp = await http.get(Uri.parse(url));
     final newsResponse = newsModelFromJson(resp.body);
     assignCategoryArticles(category, newsResponse.articles);
