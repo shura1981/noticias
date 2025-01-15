@@ -4,11 +4,17 @@ import 'package:noticias/src/services/news_service.dart';
 import 'package:noticias/src/widgets/listas_noticias_page.dart';
 import 'package:provider/provider.dart';
 
-class Tab2Page extends StatelessWidget {
+class Tab2Page extends StatefulWidget {
   const Tab2Page({Key? key}) : super(key: key);
-   
+
+  @override
+  State<Tab2Page> createState() => _Tab2PageState();
+}
+
+class _Tab2PageState extends State<Tab2Page> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return const SafeArea(
       child: Scaffold(
         body: Padding(
@@ -25,6 +31,9 @@ class Tab2Page extends StatelessWidget {
       ),
     );
   }
+  
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class _ListCategories extends StatelessWidget {
